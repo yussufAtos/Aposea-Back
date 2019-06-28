@@ -1,0 +1,228 @@
+{  "version": "1.0",
+  "network": {
+    "id": "PtPrevPf-20180808-1235-20180808-1230.arc",
+    "sourceFormat": "NF",
+    "caseDate": "2018-08-08T12:35:00.000+01:00",
+    "forecastDistance": 0
+  },
+  "preContingencyResult": {
+    "computationOk": true,
+    "limitViolations": [],
+    "actionsTaken": []
+  },
+  "postContingencyResults": [
+    {
+      "contingency": {
+        "id": "N-1 Tavel Realtor",
+        "elements": [
+          {
+            "id": "REALTL71TAVEL",
+            "type": "BRANCH"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": "VLEMAL61ZGLAC",
+            "limitType": "LOW_VOLTAGE",
+            "limit": 227.00001525878906,
+            "limitReduction": 1.0,
+            "value": 226.84519958496094,
+            "extensions": {
+              "Voltage": {
+                "preContingencyValue": 227.09154
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    },
+    {
+      "contingency": {
+        "id": "N-2 Tavel Realtor",
+        "elements": [
+          {
+            "id": "REALTL71TAVEL",
+            "type": "BRANCH"
+          },
+          {
+            "id": "REALTL72TAVEL",
+            "type": "BRANCH"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": "EGUZOY643",
+            "limitType": "CURRENT",
+            "limit": 401.0,
+            "limitReduction": 1.0,
+            "value": 411.4378356933594,
+            "side": "ONE",
+            "extensions": {
+              "ActivePower": {
+                "preContingencyValue": -25.51422119140625,
+                "postContingencyValue": -43.6519660949707
+              },
+              "Current": {
+                "preContingencyValue": 236.29344177246094
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    },
+    {
+      "contingency": {
+        "id": "N-k Distre 2.1",
+        "elements": [
+          {
+            "id": "DISTRP7_2.1",
+            "type": "BUSBAR_SECTION"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": "VINCEL61ZMAD6",
+            "limitType": "CURRENT",
+            "limit": 401.0,
+            "limitReduction": 1.0,
+            "value": 411.9810485839844,
+            "side": "TWO",
+            "extensions": {
+              "ActivePower": {
+                "preContingencyValue": 25.961233139038086,
+                "postContingencyValue": 45.00586700439453
+              },
+              "Current": {
+                "preContingencyValue": 236.75840759277344
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    },
+    {
+      "contingency": {
+        "id": "N-2 Mandarins-Warande / Attaques",
+        "elements": [
+          {
+            "id": "ATTAQL72MANDA",
+            "type": "BRANCH"
+          },
+          {
+            "id": "MANDAL71WARAN",
+            "type": "BRANCH"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": ".HIRSIL31WALDI",
+            "limitType": "CURRENT",
+            "limit": 786.0,
+            "limitReduction": 1.0,
+            "value": 842.9698486328125,
+            "side": "ONE",
+            "extensions": {
+              "ActivePower": {
+                "preContingencyValue": -158.91961669921875,
+                "postContingencyValue": -315.5678405761719
+              },
+              "Current": {
+                "preContingencyValue": 399.0476989746094
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    },
+    {
+      "contingency": {
+        "id": "N-k Argia - Cantegrit + Automate Argia",
+        "elements": [
+          {
+            "id": "ARGIAL71CANTE",
+            "type": "BRANCH"
+          },
+          {
+            "id": "ARGIAY761",
+            "type": "BRANCH"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": "BILLAL32PUTE5",
+            "limitType": "CURRENT",
+            "limit": 1250.0,
+            "limitReduction": 1.0,
+            "value": 1610.453857421875,
+            "side": "ONE",
+            "extensions": {
+              "ActivePower": {
+                "preContingencyValue": 394.7044677734375,
+                "postContingencyValue": 639.9474487304688
+              },
+              "Current": {
+                "preContingencyValue": 1015.057373046875
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    },
+    {
+      "contingency": {
+        "id": "BOLL5L61TERRA",
+        "elements": [
+          {
+            "id": "BOLL5L61TERRA",
+            "type": "BRANCH"
+          }
+        ]
+      },
+      "limitViolationsResult": {
+        "computationOk": true,
+        "limitViolations": [
+          {
+            "subjectId": ".AUBAL61MOULA",
+            "limitType": "CURRENT",
+            "limitName": "IT20",
+            "acceptableDuration": 600,
+            "limit": 1007.0,
+            "limitReduction": 1.0,
+            "value": 1013.8678588867188,
+            "side": "ONE",
+            "extensions": {
+              "ActivePower": {
+                "preContingencyValue": 196.97979736328125,
+                "postContingencyValue": 415.7920837402344
+              },
+              "Current": {
+                "preContingencyValue": 477.28033447265625
+              }
+            }
+          }
+        ],
+        "actionsTaken": []
+      }
+    }
+  ]
+}

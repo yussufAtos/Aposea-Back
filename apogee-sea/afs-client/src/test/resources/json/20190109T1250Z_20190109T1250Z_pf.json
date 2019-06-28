@@ -1,0 +1,134 @@
+{
+  "version" : 2,
+  "variantSimulatorResult" : {
+    "networkMetadata": {
+      "id": "sim1",
+      "sourceFormat": "test",
+      "caseDate": "2018-12-13T17:00:31.018+01:00",
+      "forecastDistance": 0
+    },
+    "preContingencyResult": {
+      "initialVariant": {
+        "computationOk": true,
+        "violations": [
+          {
+            "subjectId": "SSAVOL71VIGY",
+            "limitType": "CURRENT",
+            "acceptableDuration": 1200,
+            "limit": 1000.0,
+            "limitReduction": 1.0,
+            "value": 1100.0,
+            "side": "ONE"
+          },
+          {
+            "subjectId": "ARBOIL31CPNOL",
+            "limitType": "CURRENT",
+            "acceptableDuration": 1200,
+            "limit": 1000.0,
+            "limitReduction": 1.0,
+            "value": 1100.0,
+            "side": "ONE"
+          }
+        ]
+      },
+      "actionsResults": [
+        {
+          "ruleId": "R.my-rule.my-rule",
+          "actionsIds": [
+            "my-action1",
+            "my-action2"
+          ],
+          "variantResult": {
+            "computationOk": true,
+            "violations": [
+              {
+                "subjectId": "SSAVOL71VIGY",
+                "limitType": "CURRENT",
+                "acceptableDuration": 1200,
+                "limit": 1000.0,
+                "limitReduction": 1.0,
+                "value": 1100.0,
+                "side": "ONE"
+              },
+              {
+                "subjectId": "ARBOIL31CPNOL",
+                "limitType": "CURRENT",
+                "acceptableDuration": 1200,
+                "limit": 1000.0,
+                "limitReduction": 1.0,
+                "value": 1100.0,
+                "side": "ONE"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "postContingencyResults": [
+      {
+        "contingency": {
+          "id": "cont1",
+          "elements": []
+        },
+        "results": {
+          "initialVariant": {
+            "computationOk": true,
+            "violations": [
+              {
+                "subjectId": "SSAVOL71VIGY",
+                "limitType": "CURRENT",
+                "acceptableDuration": 1200,
+                "limit": 1000.0,
+                "limitReduction": 1.0,
+                "value": 1100.0,
+                "side": "ONE"
+              },
+              {
+                "subjectId": "ARBOIL31CPNOL",
+                "limitType": "CURRENT",
+                "acceptableDuration": 1200,
+                "limit": 1000.0,
+                "limitReduction": 1.0,
+                "value": 1100.0,
+                "side": "ONE"
+              }
+            ]
+          },
+          "actionsResults": [
+            {
+              "ruleId": "R.my-rule2.my-rule",
+              "actionsIds": [
+                "my-action1",
+                "my-action2"
+              ],
+              "variantResult": {
+                "computationOk": true,
+                "violations": [
+                  {
+                    "subjectId": "SSAVOL71VIGY",
+                    "limitType": "CURRENT",
+                    "acceptableDuration": 1200,
+                    "limit": 1000.0,
+                    "limitReduction": 1.0,
+                    "value": 1100.0,
+                    "side": "ONE"
+                  },
+                  {
+                    "subjectId": "ARBOIL31CPNOL",
+                    "limitType": "CURRENT",
+                    "acceptableDuration": 1200,
+                    "limit": 1000.0,
+                    "limitReduction": 1.0,
+                    "value": 1100.0,
+                    "side": "ONE"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+
+}

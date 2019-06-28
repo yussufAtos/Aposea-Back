@@ -1,0 +1,4 @@
+{
+  "apiPackage": "com.rte_france.apogee.sea.server.opfab.client.web.api",
+  "modelPackage": "com.rte_france.apogee.sea.server.opfab.client.web.model"
+}

@@ -1,0 +1,6 @@
+# On exclut tout du contexte
+**
+
+# Sauf l'application et ce qui concerne docker
+!web-server/target/*.jar
+!Dockerfile

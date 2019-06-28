@@ -1,0 +1,176 @@
+#!groovy
+
+// Jenkinsfile IC.
+// Utilisé pour la construction
+
+/**
+* CONFIGURATION JENKINS !
+*
+* Dans la configuration "Pipeline"
+* Spécifier ${gitlabBranch} dans [ Branches to build ->    Branch Specifier (blank for 'any') : ______ ]
+*
+* [ Branches to build -> Branch Specifier (blank for 'any') : ${gitlabBranch} ]
+*/
+
+// ####################################################################################
+// ## CONSTANTES DU JOB
+// ####################################################################################
+
+/** Nom du projet /application */
+String NOM_PROJET = 'apogee'
+
+/** Nom du composant */
+String NOM_COMPOSANT = 'sea-backend'
+
+/**
+ * Branche d'intégration continue STABLE sur laquelle on lance des tâches avances (ex : sonar).
+ * Permet de ne pas lancer Sonar sur des branches de fix ou de feature
+ **/
+String BRANCHE_STABLE = 'develop'
+
+/** Nom du projet sur INCA */
+String NOM_PROJET_INCA = NOM_PROJET
+
+/** Nom de l'image docker */
+String NOM_DOCKER_IMAGE = "${NOM_PROJET}-${NOM_COMPOSANT}"
+
+/** Label de l'agent Jenkins sur lequel on construit l'image docker du projet */
+String SLAVE_DOCKER = NOM_PROJET
+
+//####################################################################################
+//## PARAMETRES DEPUIS Jenkins
+//####################################################################################
+
+/** Version en cours de construction, utilisée uniquement lors de l'étape de préparation de la livraison */
+String versionApp = params.VERSION_APP ?: 'IC'
+
+/** Si true : lancement des tâches de preparation de livraison > construction docker */
+boolean doitPreparerLivraison = (params.PREPARER_LIVRAISON ?: false) == true;
+
+/** Si true : création d'un tag git */
+boolean doitTagger = (params.DOIT_TAGGER ?: false) == true;
+
+/** Si true : publication dans INCA de l'image docker (optionnel, on peut la construire en dev directement sans avoir besoin de la livrer) */
+boolean doitPublierInca = (params.PUBLIER_INCA ?: false) == true;
+
+/** Si true : construction de l'image docker */
+boolean doitConstruireDocker = doitPreparerLivraison || doitTagger || doitPublierInca || ((params.'Construction docker' ?: false) == true);
+
+//####################################################################################
+// ## VARIABLES DU JOB
+//####################################################################################
+
+/** version du composant construit */
+String buildVersion = "${versionApp}-build${env.BUILD_NUMBER}"
+
+/** branch en cours de construction */
+String currentBranch
+
+//####################################################################################
+//## PIPELINE
+//####################################################################################
+
+echo "## PARAMETRES DU BUILD #######"
+echo "$params"
+echo "## / PARAMETRES DU BUILD #######"
+
+// Execution sur le noeud de build de la plateforme Devin
+node('build') {
+    try{
+        // export de la buildVersion pour le job IC/DC parent qui fait la mise à jour du fichier compose. */
+        env.BUILD_VERSION = buildVersion
+
+        stageDevin ('🦊 Checkout') {
+            // On force la suppression du workspace pour garantir de travailler sur un projet git propre
+            // car on va commiter des choses dessus. (exemple: on ne veut pas repousser d'anciens Tags qui ont peut-être été supprimés de GitLab)
+            cleanWs()
+
+            // checkout du projet et récupération de la branche courante
+            def result = gitCheckout {}
+            currentBranch = "${result['GIT_BRANCH']}"
+
+            // init de la config git (email, userName)
+            utils.gitInitConfig()
+
+            // On met à jour la description dans Jenkins du build, pour la tracabilité
+            if (doitPreparerLivraison) {
+                utils.appendBuildDescription("Started by IC⚡️DC", true)
+            }
+            if (doitConstruireDocker) {
+                if (doitPublierInca) {
+                    utils.appendBuildDescription("🐳 <b>${buildVersion}</b> 🏷️tag 🚀INCA ", true)
+                } else if (doitTagger) {
+                    utils.appendBuildDescription("🐳 image: <b>${buildVersion}</b> 🏷️tag", true)
+                } else {
+                    utils.appendBuildDescription("🐳 image: <b>${buildVersion}</b>", true)
+                }
+            }
+            utils.appendBuildDescription("🦊 git: <b>${currentBranch}</b>", true)
+        }
+
+        stageDevin ('🏭 Build mvn') {
+            echo "🏭Construction de la version : ${buildVersion}, à partir de (tag/branch) : ${currentBranch}"
+            mvnPackage {}
+        }
+
+        stageDevin ('⚗️ Unit Test'){
+            echo "⚗️Lancement des tests unitaire"
+            junitTest{
+                ignoreFailure = false
+            }
+        }
+
+        /* version DevOps standard avec une seule branche analysée
+        stageDevin ('🔬 Code Quality', BRANCHE_STABLE == currentBranch) {
+            echo "🔬 Analyse sonar du code sur la branche stable de développement"
+            sonar {}
+        }
+        */
+        //Sonar refuse les noms de branche avec espace, ce qui est le cas pour les analyses 'merge de xxxx dans yyyyy' créées par GitLab
+        stageDevin ('🔬 Code Quality', currentBranch.indexOf(' ') == -1) {
+            echo "🔬 Analyse sonar du code sur la branche '${currentBranch}'"
+            sh "env"
+            mvn {
+                path = './'
+                if (currentBranch == 'master' || currentBranch == BRANCHE_STABLE) {
+                    options = "-Dmaven.test.skip=true -Dsonar.branch.name='${currentBranch}'"
+                } else {
+                    options = "-Dmaven.test.skip=true -Dsonar.branch.name='${currentBranch}' -Dsonar.branch.target='${BRANCHE_STABLE}'"
+                }
+                goal = 'sonar:sonar'
+                disableArchive = true
+            }
+        }
+
+        stageDevin ('🐳 Build docker', doitConstruireDocker) {
+            echo "🐳 Construction Docker"
+            dockerBuild{
+                dockerContext= '**'
+                repo = NOM_PROJET_INCA
+                imgName = NOM_DOCKER_IMAGE
+                versionImg = buildVersion
+                targetPtf = SLAVE_DOCKER
+                push = doitPublierInca
+                prefixRegistry = true
+            }
+        }
+
+        stageDevin ('🏷️Tag', doitTagger || doitPublierInca) {
+            echo "🏷️ Creation du tag de build"
+            String msg = "Tag Jenkins ${buildVersion}\n\n 🏭 ${env.BUILD_URL}";
+            gitTag{
+                tagName = buildVersion
+                doitPush = true
+                tagMsg = msg
+            }
+        }
+
+    } catch (e) {
+        // notification par mail en cas d'erreur
+        notify{
+            to = 'damien.jeandemange@rte-france.com'
+            errorMsg = e.toString()
+        }
+        throw e;
+    }
+}

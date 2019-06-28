@@ -1,0 +1,25 @@
+{  "N-1 Argia Cantegrit": [],
+  "N-1 Tavel Realtor": [
+    {
+      "idLogicContext": "MALADL31T.IND###constraint1###constraint2###constraint3###remedial4",
+      "idAbstractLogic": 4,
+      "shortDescription": "remedial4"
+    },
+    {
+      "idLogicContext": "MALADL31T.IND###constraint1###constraint2###constraint3###remedial5",
+      "idAbstractLogic": 5,
+      "shortDescription": "remedial5"
+    }
+  ],"PRE_CONTINGENCY_STATE": [
+  {
+    "idLogicContext": "MALADL31T.IND###constraint1###constraint2###constraint3###remedial1",
+    "idAbstractLogic": 1,
+    "shortDescription": "remedial1"
+  },
+  {
+    "idLogicContext": "MALADL31T.IND###constraint1###constraint2###constraint3###remedial2",
+    "idAbstractLogic": 2,
+    "shortDescription": "remedial2"
+  }
+]
+}

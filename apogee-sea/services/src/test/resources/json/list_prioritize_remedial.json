@@ -1,0 +1,85 @@
+[
+  {
+    "prioritizeStartDate": "2019-03-14T10:00:00Z",
+    "prioritizeEndDate": "2019-03-14T22:00:00Z",
+    "networkContingency": {
+      "id": "ctg00001"
+    },
+    "prioritizeRemedialList": [
+      {
+        "prioritizeValue": 1,
+        "remedial": {
+          "idRemedialRepository": "remedial2",
+          "idLogicContext": "remedial2",
+          "shortDescription": "remedial2"
+        }
+      },
+      {
+        "prioritizeValue": 2,
+        "remedial": {
+          "idRemedialRepository": "remedial1",
+          "idLogicContext": "remedial1",
+          "shortDescription": "remedial1"
+        }
+      }
+    ]
+  },
+  {
+    "prioritizeStartDate": "2019-03-14T09:00:00Z",
+    "prioritizeEndDate": "2019-03-15T22:00:00Z",
+    "networkContingency": {
+      "id": "ctg00002"
+    },
+    "prioritizeRemedialList": [
+      {
+        "prioritizeValue": 1,
+        "remedial": {
+          "idRemedialRepository": "remedial3",
+          "idLogicContext": "remedial3",
+          "shortDescription": "remedial3"
+        }
+      },
+      {
+        "prioritizeValue": 2,
+        "remedial": {
+          "idRemedialRepository": "remedial2",
+          "idLogicContext": "remedial2",
+          "shortDescription": "remedial2"
+        }
+      },
+      {
+        "prioritizeValue": 3,
+        "remedial": {
+          "idRemedialRepository": "remedial1",
+          "idLogicContext": "remedial1",
+          "shortDescription": "remedial1"
+        }
+      }
+    ]
+  },
+  {
+    "prioritizeStartDate": "2019-03-14T10:00:00Z",
+    "prioritizeEndDate": "2019-03-14T22:00:00Z",
+    "networkContingency": {
+      "id": "ctg00003"
+    },
+    "prioritizeRemedialList": [
+      {
+        "prioritizeValue": 1,
+        "remedial": {
+          "idRemedialRepository": "remedial3",
+          "idLogicContext": "remedial3",
+          "shortDescription": "remedial3"
+        }
+      },
+      {
+        "prioritizeValue": 2,
+        "remedial": {
+          "idRemedialRepository": "remedial1",
+          "idLogicContext": "remedial1",
+          "shortDescription": "remedial1"
+        }
+      }
+    ]
+  }
+]

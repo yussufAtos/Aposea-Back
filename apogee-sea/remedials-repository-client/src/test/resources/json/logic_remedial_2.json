@@ -1,0 +1,13 @@
+{  "N-1 Tavel Realtor": [
+    {
+      "idLogicContext": null,
+      "idAbstractLogic": "idRemedialRepository3",
+      "shortDescription": "remedial3"
+    },
+    {
+      "idLogicContext": null,
+      "idAbstractLogic": "idRemedialRepository1",
+      "shortDescription": "remedial1"
+    }
+  ]
+}

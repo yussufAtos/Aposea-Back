@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+
+  postgres:
+    build: ./postgres
+    ports:
+     - "5432:5432"
+    volumes:
+      - "/tmp/:/var/lib/postgresql/pg_log/"
+      - "/tmp/:/var/lib/postgresql/backup/"
+    healthcheck:
+      test: pg_isready -U postgres || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 3
+    environment:
+      - SPRING_DATASOURCE_USERNAME=apogee
+      - SPRING_DATASOURCE_PASSWORD=2015@pogee
+
+  pgadmin:
+    image: dpage/pgadmin4:3.0
+    ports:
+     - "80:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD=admin

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.rte_france.apogee</groupId>
+        <artifactId>apogee-sea-backend</artifactId>
+        <version>1.7.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>apogee-sea-web-server</artifactId>
+    <version>1.7.0-SNAPSHOT</version>
+    <name>web-server</name>
+    <description>Web Server</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <checkstyle.skip>false</checkstyle.skip>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.powsybl</groupId>
+            <artifactId>powsybl-iidm-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- prometheus  -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!--SpringFox dependencies -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+            <!-- javassist is more recent in spring-boot -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.joschi.jackson</groupId>
+            <artifactId>jackson-datatype-threetenbp</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
+        <!-- Bean Validation API support -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rte_france.apogee</groupId>
+            <artifactId>apogee-sea-data-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rte_france.apogee</groupId>
+            <artifactId>apogee-sea-afs-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rte_france.apogee</groupId>
+            <artifactId>apogee-sea-opfab-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rte_france.apogee</groupId>
+            <artifactId>apogee-sea-remedials-repository-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>.swagger-codegen-ignore</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>2.3.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>
+                            <output>${project.build.directory}/generated-sources</output>
+                            <language>spring</language>
+                            <configurationFile>${project.basedir}/src/main/resources/swaggerconf.json
+                            </configurationFile>
+                            <verbose>false</verbose>
+                            <!--<apiPackage>com.rte_france.apogee.sea.server.api</apiPackage>-->
+                            <!--<modelPackage>com.rte_france.apogee.sea.server.model</modelPackage>-->
+                            <!--<verbose>false</verbose>-->
+                            <!--<invokerPackage>com.rte_france.apogee.sea.server</invokerPackage>-->
+                            <configOptions>
+                                <import-mappings>
+                                    NetworkContext=com.rte_france.apogee.sea.server.model.computation.NetworkContext,
+                                    AbstractComputationResult=com.rte_france.apogee.sea.server.model.computation.AbstractComputationResult,
+                                    NetworkBaseVoltage=com.rte_france.apogee.sea.server.model.zones.NetworkBaseVoltage,
+                                    NetworkVoltageLevel=com.rte_france.apogee.sea.server.model.zones.NetworkVoltageLevel,
+                                    NetworkZone=com.rte_france.apogee.sea.server.model.zones.NetworkZone,
+                                    User=com.rte_france.apogee.sea.server.model.user.User,
+                                    Usertype=com.rte_france.apogee.sea.server.model.user.Usertype,
+                                    UsertypeWrapper=com.rte_france.apogee.sea.server.wrapper.UsertypeWrapper,
+                                    CaseType=com.rte_france.apogee.sea.server.model.computation.CaseType,
+                                    CaseCategory=com.rte_france.apogee.sea.server.model.computation.CaseCategory,
+                                    Prioritize=com.rte_france.apogee.sea.server.model.remedials.Prioritize,
+                                    Remedial=com.rte_france.apogee.sea.server.model.remedials.Remedial,
+                                    RemedialsListForPrioritize=com.rte_france.apogee.sea.server.services.logic.RemedialsListForPrioritize,
+                                    PrioritizeRemedialByContingency=com.rte_france.apogee.sea.server.services.logic.PrioritizeRemedialByContingency,
+                                    SnapshotResult=com.rte_france.apogee.sea.server.model.computation.logic.SnapshotResult,
+                                    SnapshotContingencyContextIdentifier=com.rte_france.apogee.sea.server.model.computation.logic.SnapshotContingencyContextIdentifier,
+                                    ArraySnapshotContingencyContext=com.rte_france.apogee.sea.server.model.computation.logic.ArraySnapshotContingencyContext,
+                                    LimitViolationByIdenfifier=com.rte_france.apogee.sea.server.model.computation.logic.LimitViolationByIdenfifier,
+                                    LimitViolationByIdenfifierAndRemedials=com.rte_france.apogee.sea.server.model.computation.logic.LimitViolationByIdenfifierAndRemedials,
+                                    TimerangeLogic=com.rte_france.apogee.sea.server.logic.TimerangeLogic,
+                                    TimerangeType=com.rte_france.apogee.sea.server.model.timerange.TimerangeType
+                                </import-mappings>
+                            </configOptions>
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${gitcommitid.version}</version>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <verbose>false</verbose>
+                    <gitDescribe>
+                        <tags>true</tags>
+                    </gitDescribe>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

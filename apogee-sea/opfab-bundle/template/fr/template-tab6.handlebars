@@ -1,0 +1,306 @@
+<div id="apogee-contingencies6">
+    <input type="text" id="inputContingenciesTab6" onkeyup="findContingenciesAndConstraintsTab6()"
+           placeholder="Recherche défauts..">
+    <input type="text" id="inputConstraintsTab6" onkeyup="findContingenciesAndConstraintsTab6()"
+           placeholder="Recherche contraintes..">
+    <br/>
+
+    {{#if data.5.networkLimitViolationsN }}
+        <div>
+
+            <button class="accordion6">Contraintes en N</button>
+
+            <div class="panel" style="display:none">
+                <br>
+                <table class="darkTable">
+                    <thead>
+                    </tr>
+                    <th style="Width:440px">Contraintes</th>
+                    {{#data.5.networkLimitViolationsN.0.networkContexts}}
+
+                        <th style="width:100px">
+
+                            <div class="tooltipApogee">{{dateFormat date format="HH:mm"}}
+                                <span class="tooltiptext">
+                          Type:  {{detail.type}} <br/>
+                          Date de Calcul: {{dateFormat   detail.computationDate  format="HH:mm"}} <br/>
+                          Date réseau :{{dateFormat date format="HH:mm"}} <br/>
+                       </span>
+                            </div>
+                        </th>
+
+                    {{/data.5.networkLimitViolationsN.0.networkContexts}}
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    {{#data.5.networkLimitViolationsN}}
+
+                        <tr>
+                            <td style="width:440px">
+                                {{name}} ({{detail.limitType}} | {{detail.acceptableDuration}}    {{#if
+                                    detail.acceptableDuration }} |  {{/if }} {{detail.side}})
+                            </td>
+
+                            {{#values}}
+
+                                <td style="width:100px">
+                                    <div class="tooltipApogee">  {{#if value}} {{value}} {{/if}}
+                                        <span class="tooltiptext">
+    Ouvrage:{{../name}} <br/>
+
+                                            {{#if detail.limit}}          Limit:{{detail.limit}}.   <br/> {{/if}}
+                                            {{#if detail.limitType}}
+                                                Type de Limite:{{detail.limitType}}. <br/> {{/if}}
+                                            {{#if detail.preValueMw}}
+                                                Valeur Pré-Défaut (MW):{{detail.preValueMw}}.  <br/> {{/if}}
+                                            {{#if detail.valueMw}}        Valeur (MW):{{detail.valueMw}}.  <br/> {{/if}}
+                                            {{#if detail.preValue}}
+                                                Valeur Pré-Défaut:{{detail.preValue}}.  <br/> {{/if}}
+                                            {{#if detail.side}}           coté:{{detail.side}}.  <br/> {{/if}}
+                                            {{#if detail.value}}          Valeur:{{detail.value}}.  <br/> {{/if}}
+                                            {{#if detail.acceptableDuration}}
+                                                Tempo:{{detail.acceptableDuration}}. <br/> {{/if}}
+
+         </span>
+                                    </div>
+
+                                </td>
+                            {{/values}}
+                        </tr>
+                    {{/data.5.networkLimitViolationsN}}
+
+                    </tbody>
+
+                </table>
+                <br>
+            </div>
+            <br/>
+        </div>
+    {{/if }}
+
+
+    {{#data.5.networkContingencies}}
+
+    <div>
+
+        <button class="accordion6">{{name}}</button>
+
+        <div class="panel" style="display:none">
+            <br/>
+
+            {{#if this.networkLimitViolations }}
+
+                <table class="darkTable">
+                    <thead>
+                    <tr>
+                        <th style="width:440px">Contraintes</th>
+                        {{#networkLimitViolations.0.networkContexts}}
+
+                            <th style="width:100px">
+                                <div class="tooltipApogee">{{dateFormat date format="HH:mm"}}
+                                    <span class="tooltiptext">
+                          Type:  {{detail.type}} <br/>
+                          Date de Calcul: {{dateFormat   detail.computationDate  format="HH:mm"}} <br/>
+                          Date réseau :{{dateFormat date format="HH:mm"}} <br/>
+                        </span>
+                                </div>
+                            </th>
+
+                        {{/networkLimitViolations.0.networkContexts}}
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {{#networkLimitViolations}}
+
+                        <tr>
+                            <td style="width:440px">
+                                {{name}} ({{detail.limitType}} | {{detail.acceptableDuration}}    {{#if
+                                    detail.acceptableDuration }} |  {{/if }} {{detail.side}})
+                            </td>
+
+                            {{#values}}
+                                <td style="width:100px">
+                                    <div class="tooltipApogee">  {{#if value}} {{value}} {{/if}}
+                                        <span class="tooltiptext">
+    Ouvrage:{{../name}} <br/>
+
+                                            {{#if detail.limit}}          Limit:{{detail.limit}}.   <br/> {{/if}}
+                                            {{#if detail.limitType}}
+                                                Type de Limite:{{detail.limitType}}. <br/> {{/if}}
+                                            {{#if detail.preValueMw}}
+                                                Valeur Pré-Défaut (MW):{{detail.preValueMw}}.  <br/> {{/if}}
+                                            {{#if detail.valueMw}}        Valeur (MW):{{detail.valueMw}}.  <br/> {{/if}}
+                                            {{#if detail.preValue}}
+                                                Valeur Pré-Défaut:{{detail.preValue}}.  <br/> {{/if}}
+                                            {{#if detail.side}}           coté:{{detail.side}}.  <br/> {{/if}}
+                                            {{#if detail.value}}          Valeur:{{detail.value}}.  <br/> {{/if}}
+                                            {{#if detail.acceptableDuration}}
+                                                Tempo:{{detail.acceptableDuration}}. <br/> {{/if}}
+
+         </span>
+                                    </div>
+
+                                </td>
+
+                            {{/values}}
+
+                        </tr>
+
+                    {{/networkLimitViolations}}
+
+                    </tbody>
+
+                </table>
+            {{/if }}
+            <br/>
+
+            {{#networkRemedials}}
+                <p class="{{detail.status}}">Parade: {{name}}</p>
+                {{#if this.networkLimitViolations }}
+                    <table class="darkTable">
+                        <thead>
+                        <tr>
+                            <th style="width:440px">Contraintes</th>
+
+                            {{#networkLimitViolations.0.networkContexts}}
+
+                                <th>
+                                    <div class="tooltipApogee">{{dateFormat date format="HH:mm"}}
+                                        <span class="tooltiptext">
+                     Type:  {{detail.type}} <br/>
+                     Date de Calcul: {{dateFormat   detail.computationDate  format="HH:mm"}} <br/>
+                          Date réseau :{{dateFormat   date   format="HH:mm"}} <br/>
+                   </span>
+                                    </div>
+                                </th>
+                            {{/networkLimitViolations.0.networkContexts}}
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#networkLimitViolations}}
+                            <tr>
+                                <td style="min-width:440px">
+                                    {{name}} ({{detail.limitType}} | {{detail.acceptableDuration}}    {{#if
+                                        detail.acceptableDuration }} |  {{/if }} {{detail.side}})
+                                </td>
+
+                                {{#values}}
+                                    <td style="width:100px">
+                                        <div class="tooltipApogee">  {{#if value}} {{value}} {{/if}}
+                                            <span class="tooltiptext">
+
+   {{#if detail.limit}}          Limit: {{detail.limit}}   <br/> {{/if}}
+                                                {{#if detail.limitType}}
+                                                    Type de Limite :{{detail.limitType}} <br/> {{/if}}
+                                                {{#if detail.preValueMw}}
+                                                    Valeur Pré-Défaut (MW) :{{detail.preValueMw}}  <br/> {{/if}}
+                                                {{#if detail.valueMw}}
+                                                    Valeur (MW) :{{detail.valueMw}}  <br/> {{/if}}
+                                                {{#if detail.side}}           coté :  {{detail.side}}  <br/> {{/if}}
+                                                {{#if detail.value}}          Valeur :{{detail.value}}  <br/> {{/if}}
+                                                {{#if detail.acceptableDuration}}
+                                                    Tempo :    {{detail.acceptableDuration}} <br/> {{/if}}
+
+                 </span>
+                                        </div>
+                                    </td>
+                                {{/values}}
+                            </tr>
+
+                        {{/networkLimitViolations}}
+
+                        </tbody>
+                    </table>
+                {{/if }}
+                <br/>
+            {{/networkRemedials}}
+
+        </div>
+
+    </div>
+
+    {{/data.5.networkContingencies}}
+
+</div>
+
+
+    <script>
+        var acc = document.getElementsByClassName("accordion6");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+
+                } else {
+                    panel.style.display = "block";
+
+                }
+            });
+        }
+
+
+        function findContingenciesAndConstraintsTab6() {
+            // Declare variables
+            var inputContingencies, filterContingencies, inputConstraints, filterConstraints, contingencies, buttons, i,
+                    txtValue, panel;
+
+            inputContingencies = document.getElementById('inputContingenciesTab6');
+            filterContingencies = inputContingencies.value.toUpperCase();
+
+            inputConstraints = document.getElementById('inputConstraintsTab6');
+            filterConstraints = inputConstraints.value.toUpperCase();
+
+            contingencies = document.getElementById("apogee-contingencies6");
+            buttons = contingencies.getElementsByTagName('button');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < buttons.length; i++) {
+                txtValue = buttons[i].textContent || buttons[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filterContingencies) > -1) {
+
+                    if (filterConstraints == "") {
+                        buttons[i].parentNode.style.display = "";
+                    } else {
+                        panel = buttons[i].nextElementSibling;
+                        buttons[i].parentNode.style.display = findConstraintsTab6(panel, filterConstraints);
+                    }
+                } else {
+
+                    if (filterConstraints == "") {
+                        buttons[i].parentNode.style.display = "none";
+                    } else {
+                        panel = buttons[i].nextElementSibling;
+                        buttons[i].parentNode.style.display = findConstraintsTab6(panel, filterConstraints);
+                    }
+                }
+            }
+        }
+
+        function findConstraintsTab6(panel, filterConstraints) {
+            // Declare variables
+            var tables, i, j, txtValue;
+
+            tables = panel.getElementsByClassName("darkTable");
+
+            for (i = 0; i < tables.length; i++) {
+                for (j = 1; j < tables[i].rows.length; j++) {
+                    txtValue = tables[i].rows[j].cells[0].textContent || tables[i].rows[j].cells[0].innerText;
+
+                    if (txtValue.toUpperCase().indexOf(filterConstraints) > -1) {
+                        return "";
+                    }
+                }
+            }
+
+            return "none";
+        }
+    </script>

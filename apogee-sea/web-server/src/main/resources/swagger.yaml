@@ -1,0 +1,2067 @@
+swagger: '2.0'
+info:
+  description: |-
+    <h1>Apogee SEA</h1>
+    Apogee SEA REST APIs
+  version: 1.0.0
+  title: Apogee-sea
+  contact:
+    name: Apogee SEA Team
+basePath: /
+securityDefinitions:
+  OauthSecurity:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: 'http://localhost:2080/api/authorize'
+    scopes:
+      write: write scope
+      read: read scope
+    description: OAuth 2.0
+tags:
+- name: computation
+  description: Computation results APIs
+- name: zones
+  description: Network zones APIs
+- name: test
+  description: APIS for test only (not for production use)
+- name: config
+  description: Case Categories and Case Types configuration APIs
+- name: users
+  description: Users APIs
+- name: remedial
+  description: Remedials priorization APIs
+schemes:
+- http
+paths:
+
+  #
+  # Computation APIs
+  #
+  /computation/context:
+    get:
+      tags: [computation]
+      summary: Get network contexts
+      description: >-
+        <p>Get all network contexts.</p>
+      operationId: getNetworkContexts
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: caseType
+        type: string
+        description: optionally filter the result to the contexts of the specified caseType.
+        required: false
+      responses:
+        200:
+          description: A list of network contexts.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkContext'
+        500:
+          description: Internal Server Error
+
+    delete:
+      tags: [computation]
+      summary: Delete the network contexts
+      description: >-
+        <p>Delete all or one computation context.</p>
+      operationId: deleteNetworkContexts
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - text/plain; charset=utf-8
+      parameters:
+      - in: query
+        name: idAfsImportedCase
+        type: string
+        description: If provided, only the context of the specified AFS ImportedCase ID will be deleted.
+        required: false
+      responses:
+        200:
+          description: computation contexts deleted.
+          schema:
+            type: string
+        500:
+          description: Internal Server Error
+
+  /computation/context/last:
+    get:
+      tags: [computation]
+      summary: Get the last network contexts
+      description: >-
+        <p>Get the last version of the network contexts. The last version is determined by the computation date.</p>
+        <p>Given a {computation type ; network date} tuple, multiple versions the network contexts may exist.</p>
+        <p>All these versions differ by their computation date only.</p>
+        <p>For example the may be multiple versions of today's 7pm peak forecast.</p>
+        <p>This API will return only the network context having the most recent computation date.</p>
+      operationId: getLastNetworkContexts
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: type
+        type: string
+        description: optionally filter the result to the contexts of the specified caseType.
+        required: false
+      responses:
+        200:
+          description: A list of network contexts.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkContext'
+        500:
+          description: Internal Server Error
+
+  /computation/context/lastwithpriority:
+    get:
+      tags: [computation]
+      summary: Get the last network contexts applying Case Category priorities
+      description: >-
+        <p>Get the last version of the network contexts using Case Category priorities.</p>
+        <p>For a given Case Category and Case Type. The last version is determined by the computation date.</p>
+        <p>For multiple network contexts with the same network date but different case categories,</p>
+        <p>the priority order configured in the case category is applied.</p>
+      operationId: getLastNetworkContextsWithPriority
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of network contexts.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkContext'
+        500:
+          description: Internal Server Error
+
+  /computation/result/{idAfsRunner}:
+    get:
+      tags: [computation]
+      summary: >-
+        Get the computation results of the provided AFS computation runner ID.
+      description: >-
+        <p>Get the computation results of the provided AFS computation runner ID.</p>
+      operationId: getComputationResult
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idAfsRunner
+        type: string
+        description: The AFS computation runner ID.
+        required: true
+      responses:
+        200:
+          description: A computation result.
+          schema:
+            $ref: '#/definitions/AbstractComputationResult'
+        500:
+          description: Internal Server Error
+
+  /computation/uisnapshot:
+    post:
+      tags: [computation]
+      summary: Manually trigger the creation of a new computation results snapshot, for use in the User Interface.
+      description: >-
+        <p>Creates a new snapshot of the current computation results, for use in the User Interface.</p>
+      operationId: createUiSnapshot
+      security:
+      - OauthSecurity:
+        - write
+      responses:
+        204:
+          description: UI computation results snapshot successfully created.
+    get:
+      tags: [computation]
+      summary: Get computation results from a snapshot
+      description: >-
+        <p>Get computation results from a snapshot.</p>
+        <p>Either the latest snapshot, or a specified snapshot can be retrieved.</p>
+        <p>Results are grouped and paginated by contingencies.</p>
+      operationId: getUiSnapshotResults
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: snapshotid
+        type: string
+        description: if provided, use the specified snapshot ID, otherwise use the latest snapshot available
+        required: false
+      - in: query
+        name: page
+        type: integer
+        default: 1
+        required: true
+        description: page number to retrieve, starts at page 1.
+      - in: query
+        name: size
+        type: integer
+        minimum: 1
+        default: 50
+        required: true
+        description: page size.
+      - in: query
+        name: zones
+        type: array
+        items:
+          type: string
+        description: list of Network Zones to filter
+        required: false
+      - in: query
+        name: timerange
+        type: string
+        description: if provided, use the specified timerange, otherwise use the time range that returns everything "Tout"
+        required: false
+      - in: query
+        name: exclude
+        type: boolean
+        description: True, exclude is active.
+        required: false
+      responses:
+        200:
+          description: snapshot results.
+          schema:
+            $ref: '#/definitions/SnapshotResult'
+        500:
+          description: Internal Server Error
+        404:
+          description: The snapshot was not found.
+
+  /computation/uisnapshot/{snapshotid}:
+    get:
+      tags: [computation]
+      summary: >-
+        Get the computation results for a specific UI snapshot and Contingency
+      description: >-
+        <p>Get the computation results for a specific UI snapshot and Contingency.</p>
+      operationId: getUiSnapshotContingencyResults
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: snapshotid
+        type: string
+        description: The UI snapshot ID.
+        required: true
+      - in: query
+        name: contingencyid
+        type: string
+        description: The contingency ID.
+        required: true
+      - in: query
+        name: contextsId
+        type: array
+        items:
+          type: string
+        description: list of Network contexts ID
+        required: true
+      - in: query
+        name: exclude
+        type: boolean
+        description: True, exclude is active.
+        required: false
+      responses:
+        200:
+          description: limitViolations
+          schema:
+            $ref: '#/definitions/LimitViolationByIdenfifierAndRemedials'
+        405:
+          description: Invalid input
+        404:
+          description: The snapshot was not found.
+
+  /computation/result:
+    post:
+      tags: [computation]
+      summary: Upload manually an iTesla Security Analysis Result file (JSON).
+      description: >-
+        <p>Upload manually an iTesla Security Analysis Result file (JSON) and remedial (JSON).</p>
+        <p>Used primarily for testing purposes (avoid having to integrate AFS and iTesla).</p>
+        <p>File name should be caseType_networkDate_computationDate.json</p>
+        <p>For example: pf_20190110T0800Z_20190110T0800Z.json or srj-ij_20190110T1230Z_20190110T0800Z.json</p>
+        <p>For example remedialJson: {"BXLIEL61SIRMI": [
+                                         {
+                                           "idLogicContext": 689,
+                                           "idAbstractLogic": 8212,
+                                           "shortDescription": "Ouverture SIRML4ZTREZ.1"
+                                         },
+                                         {
+                                           "idLogicContext": 688,
+                                           "idAbstractLogic": 8210,
+                                           "shortDescription": "Ouverture BXLIEL41LUCON"
+                                         }
+                                       ]
+                                     }</p>
+      operationId: uploadComputationResult
+      security:
+      - OauthSecurity:
+        - write
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: saresult
+        type: file
+        description: The security analysis result file
+      - in: formData
+        name: remedial
+        type: file
+        description: The remedials file
+  #
+  # remedial APIs
+  #
+  /remedial:
+    get:
+      tags: [remedial]
+      summary: Get the all remedials
+      description: >-
+        <p>Get all or some of the remedials.</p>
+      operationId: fetchRemedials
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: contingencyId
+        type: string
+        description: optionally filter the result to the remedial of the specified contingencyId.
+        required: false
+      responses:
+        200:
+          description: A list of remedials.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Remedial'
+        500:
+          description: Internal Server Error
+
+    delete:
+      tags: [remedial]
+      summary: delete all or some of the remedials
+      description: >-
+        <p>delete all or some of the remedials.</p>
+      operationId: deleteRemedials
+      parameters:
+      - in: query
+        name: remedialId
+        type: string
+        description: if provided, only delete remedial of the specified id remedial.
+        required: false
+      responses:
+        204:
+          description: remedial deleted.
+        500:
+          description: Internal Server Error
+
+  /remedial/refresh:
+    post:
+      tags: [remedial]
+      summary: Check for new candidate remedials in the remedials repository.
+      description: >-
+        <p>Candidate remedials are retrieved from the remedials repository automatically only upon reception of a new security analysis result.</p>
+        <p>This endpoint allows to force checking for new candidate remedials globally or specifically for a given security analysis result.</p>
+      operationId: refreshRemedialsFromRepository
+      security:
+      - OauthSecurity:
+        - write
+      parameters:
+      - in: query
+        name: idAfsRunner
+        required: true
+        type: string
+        description: optionally, the AFS computation runner ID for which candidate remedials should be refreshed.
+      responses:
+        204:
+          description: remedials refreshed successfully
+
+  /remedial/{networkcontextId}:
+    get:
+      tags: [remedial]
+      summary: Get the all remedials, candidates remedials and prioritized remedials
+      description: >-
+        <p>Get the all remedials, candidates remedials and prioritized remedials.</p>
+      operationId: fetchRemedialsForPrioritize
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: networkcontextId
+        required: true
+        type: string
+        description: Id of networkcontext.
+      - in: query
+        name: contingencyId
+        type: string
+        description: filter the result to the remedials of the specified contingencyId.
+        required: true
+      - in: query
+        name: networkDate
+        type: string
+        description: return prioritized and candidates remedials of the specified date (e.g. "2018-11-12T11:23:18.692Z").
+        required: true
+      responses:
+        200:
+          description: A lists of all, candidates remedials and prioritized remedials.
+          schema:
+            $ref: '#/definitions/RemedialsListForPrioritize'
+        500:
+          description: Internal Server Error
+
+  /remedial/prioritize:
+    post:
+      tags: [remedial]
+      summary: Creates a new prioritize Remedial.
+      description: >-
+        <p>New prioritize Remedial</p>
+      operationId: addPrioritizeRemedial
+      security:
+      - OauthSecurity:
+        - write
+      parameters:
+      - in: body
+        name: prioritizeRemedial
+        description: The prioritize remedial JSON you want to post
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/Prioritize'
+      responses:
+        204:
+          description: Prioritize remedials created successfully
+
+    get:
+      tags: [remedial]
+      summary: Get the prioritized remedials
+      description: >-
+        <p>Get all or some of the prioritized remedials.</p>
+      operationId: fetchPrioritizeRemedials
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: prioritizeDate
+        type: string
+        description: if provided, only return prioritized remedials of the specified date (e.g. "2018-11-12T11:23:18.692Z").
+        required: false
+      - in: query
+        name: contingencyId
+        type: string
+        description: optionally filter the result to the prioritize of the specified contingencyId.
+        required: false
+      responses:
+        200:
+          description: A list of prioritized remedials.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prioritize'
+        500:
+          description: Internal Server Error
+    delete:
+      tags: [remedial]
+      summary: delete all or some of the prioritize remedials
+      description: >-
+        <p>delete all or some of the prioritized remedials.</p>
+      operationId: deletePrioritizeRemedials
+      parameters:
+      - in: query
+        name: contingencyId
+        type: string
+        description: if provided, only delete prioritized remedials of the specified id contingency.
+        required: false
+      responses:
+        204:
+          description: prioritize remedials deleted.
+        500:
+          description: Internal Server Error
+
+
+  #
+  # Configuration APIs
+  #
+  /config/casetypes:
+    get:
+      tags: [config]
+      summary: Get all CaseTypes.
+      description: >-
+        <p>Get all CaseTypes.</p>
+      operationId: getCaseTypes
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of CaseType objects.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CaseType'
+
+    post:
+      tags: [config]
+      summary: Create a new Case Type.
+      description: >-
+        <p>Create a new Case Type.</p>
+      operationId: addCaseType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: casetype
+        description: The CaseType object to be created
+        schema:
+          $ref: '#/definitions/CaseType'
+      responses:
+        201:
+          description: CaseType created successfully
+          schema:
+            $ref: '#/definitions/CaseType'
+
+  /config/casetypes/{name}:
+    get:
+      tags: [config]
+      summary: Get a CaseType.
+      description: >-
+        <p>Get a CaseType.</p>
+      operationId: getCaseType
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseType
+      responses:
+        200:
+          description: A CaseType object.
+          schema:
+            $ref: '#/definitions/CaseType'
+        404:
+          description: The CaseType with the specified name was not found.
+
+    put:
+      tags: [config]
+      summary: Update a CaseType.
+      description: >-
+        <p>Update a CaseType.</p>
+      operationId: updateCaseType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseType to be updated
+      - in: body
+        name: casetype
+        description: The updated CaseType object
+        schema:
+          $ref: '#/definitions/CaseType'
+      responses:
+        200:
+          description: A CaseType object.
+          schema:
+            $ref: '#/definitions/CaseType'
+        404:
+          description: The CaseType with the specified name was not found.
+
+    delete:
+      tags: [config]
+      summary: Delete a CaseType.
+      description: >-
+        <p>Delete a CaseType.</p>
+      operationId: deleteCaseType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseType to be deleted
+      responses:
+        204:
+          description: CaseType deleted
+          schema:
+            $ref: '#/definitions/CaseType'
+        404:
+          description: The CaseType with the specified name was not found.
+        409:
+          description: The CaseType could not be deleted because it is still in use
+
+  /config/casecategories:
+    get:
+      tags: [config]
+      summary: Get all CaseCategories.
+      description: >-
+        <p>Get all CaseCategories.</p>
+      operationId: getCaseCategories
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of caseCategories.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CaseCategory'
+
+    post:
+      tags: [config]
+      summary: Create a new CaseCategory.
+      description: >-
+        <p>Create a new CaseCategory.</p>
+      operationId: addCaseCategory
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: casecategory
+        description: The CaseCategory object to be created
+        schema:
+          $ref: '#/definitions/CaseCategory'
+      responses:
+        201:
+          description: CaseCategory created successfully
+          schema:
+            $ref: '#/definitions/CaseCategory'
+
+  /config/casecategories/{name}:
+    get:
+      tags: [config]
+      summary: Get a CaseCategory.
+      description: >-
+        <p>Get a CaseCategory.</p>
+      operationId: getCaseCategory
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseCategory
+      responses:
+        200:
+          description: A CaseCategory object.
+          schema:
+            $ref: '#/definitions/CaseCategory'
+        404:
+          description: The CaseCategory with the specified name was not found.
+
+    put:
+      tags: [config]
+      summary: Update a CaseCategory.
+      description: >-
+        <p>Update a CaseCategory.</p>
+      operationId: updateCaseCategory
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseCategory to be updated
+      - in: body
+        name: caseCategory
+        description: The updated CaseCategory object
+        schema:
+          $ref: '#/definitions/CaseCategory'
+      responses:
+        200:
+          description: A CaseCategory object.
+          schema:
+            $ref: '#/definitions/CaseCategory'
+        404:
+          description: The CaseCategory with the specified name was not found.
+
+    delete:
+      tags: [config]
+      summary: Delete a CaseCategory.
+      description: >-
+        <p>Delete a CaseCategory.</p>
+      operationId: deleteCaseCategory
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the CaseCategory to be deleted
+      responses:
+        204:
+          description: caseCategory deleted
+          schema:
+            $ref: '#/definitions/CaseCategory'
+        404:
+          description: The CaseCategory with the specified name was not found.
+        409:
+          description: The CaseCategory could not be deleted because it is still in use
+
+  /config/timerangeTypes:
+    get:
+      tags: [config]
+      summary: Get all time range type.
+      description: >-
+        <p>Get all timerangeTypes.</p>
+      operationId: getTimerangeTypes
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of timerangeTypes.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TimerangeType'
+
+    post:
+      tags: [config]
+      summary: Create a new TimerangeType.
+      description: >-
+        <p>Create a new TimerangeType.</p>
+      operationId: addTimerangeType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: timerangeLogic
+        description: The TimerangeType object to be created
+        schema:
+          $ref: '#/definitions/TimerangeLogic'
+      responses:
+        201:
+          description: TimerangeType created successfully
+          schema:
+            $ref: '#/definitions/TimerangeType'
+
+  /config/timerangeTypes/{name}:
+    get:
+      tags: [config]
+      summary: Get a TimerangeType.
+      description: >-
+        <p>Get a TimerangeType.</p>
+      operationId: getTimerangeType
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the TimerangeType
+      responses:
+        200:
+          description: A TimerangeType object.
+          schema:
+            $ref: '#/definitions/TimerangeType'
+        404:
+          description: The TimerangeType with the specified name was not found.
+
+    put:
+      tags: [config]
+      summary: Update a TimerangeType.
+      description: >-
+        <p>Update a TimerangeType.</p>
+      operationId: updateTimerangeType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the TimerangeType to be updated
+      - in: body
+        name: timerangeLogic
+        description: The updated TimerangeType object
+        schema:
+          $ref: '#/definitions/TimerangeLogic'
+      responses:
+        200:
+          description: A TimerangeType object.
+          schema:
+            $ref: '#/definitions/TimerangeType'
+        404:
+          description: The TimerangeType with the specified name was not found.
+
+    delete:
+      tags: [config]
+      summary: Delete a TimerangeType.
+      description: >-
+        <p>Delete a TimerangeType.</p>
+      operationId: deleteTimerangeType
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: the name of the TimerangeType to be deleted
+      responses:
+        204:
+          description: timerangeType deleted
+          schema:
+            $ref: '#/definitions/TimerangeType'
+        404:
+          description: The TimerangeType with the specified name was not found.
+        409:
+          description: The TimerangeType could not be deleted because it is still in use
+
+  #
+  # Network Zones APIs - NetworkBaseVoltage
+  #
+  /zones/networkBaseVoltages:
+    get:
+      tags: [zones]
+      summary: Get all NetworkBaseVoltages.
+      description: >-
+        <p>Get all NetworkBaseVoltages.</p>
+      operationId: getNetworkBaseVoltages
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of NetworkBaseVoltage objects.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkBaseVoltage'
+
+    post:
+      tags: [zones]
+      summary: Create new NetworkBaseVoltages.
+      description: >-
+        <p>Create new NetworkBaseVoltages.</p>
+      operationId: addNetworkBaseVoltages
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: networkBaseVoltages
+        description: The list of NetworkBaseVoltage objects to be created.
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/NetworkBaseVoltage'
+      responses:
+        201:
+          description: NetworkBaseVoltage objects created successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkBaseVoltage'
+
+  /zones/networkBaseVoltages/{objectid}:
+    get:
+      tags: [zones]
+      summary: Get a NetworkBaseVoltage.
+      description: >-
+        <p>Get a NetworkBaseVoltage.</p>
+      operationId: getNetworkBaseVoltage
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of the NetworkBaseVoltage.
+      responses:
+        200:
+          description: NetworkBaseVoltage object.
+          schema:
+            $ref: '#/definitions/NetworkBaseVoltage'
+        404:
+          description: The NetworkBaseVoltage with the specified objectid was not found.
+
+    put:
+      tags: [zones]
+      summary: Update networkBaseVoltage.
+      description: >-
+        <p>Update networkBaseVoltage.</p>
+      operationId: updateNetworkBaseVoltage
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of the NetworkBaseVoltage to be updated.
+      - in: body
+        name: networkBaseVoltage
+        description: The updated NetworkBaseVoltage.
+        schema:
+          $ref: '#/definitions/NetworkBaseVoltage'
+      responses:
+        200:
+          description: NetworkBaseVoltage updated.
+          schema:
+            $ref: '#/definitions/NetworkBaseVoltage'
+        404:
+          description: The NetworkBaseVoltage with the specified objectid was not found.
+
+    delete:
+      tags: [zones]
+      summary: Delete a NetworkBaseVoltage.
+      description: >-
+        <p>Delete a NetworkBaseVoltage.</p>
+      operationId: deleteNetworkBaseVoltage
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of the NetworkBaseVoltage to be deleted.
+      responses:
+        204:
+          description: NetworkBaseVoltage deleted.
+          schema:
+            $ref: '#/definitions/NetworkBaseVoltage'
+
+  #
+  # Network Zones APIs - NetworkVoltageLevel
+  #
+  /zones/networkVoltageLevels:
+    get:
+      tags: [zones]
+      summary: Get all NetworkVoltageLevels.
+      description: >-
+        <p>Get all NetworkVoltageLevels.</p>
+      operationId: getNetworkVoltageLevels
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of NetworkVoltageLevels.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkVoltageLevel'
+
+    post:
+      tags: [zones]
+      summary: Create new NetworkVoltageLevels.
+      description: >-
+        <p>Create new NetworkVoltageLevels</p>
+      operationId: addNetworkVoltageLevels
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: networkVoltageLevels
+        description: The list of NetworkVoltageLevel objects to be created.
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/NetworkVoltageLevel'
+      responses:
+        201:
+          description: NetworkVoltageLevel objects created successfully.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkVoltageLevel'
+
+  /zones/networkVoltageLevels/{objectid}:
+    get:
+      tags: [zones]
+      summary: Get NetworkVoltageLevel.
+      description: >-
+        <p>Get NetworkVoltageLevel.</p>
+      operationId: getNetworkVoltageLevel
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkVoltageLevel.
+      responses:
+        200:
+          description: NetworkVoltageLevel object.
+          schema:
+            $ref: '#/definitions/NetworkVoltageLevel'
+        404:
+          description: The NetworkVoltageLevel with the specified objectid was not found.
+
+    put:
+      tags: [zones]
+      summary: Update NetworkVoltageLevel.
+      description: >-
+        <p>Update NetworkVoltageLevel.</p>
+      operationId: updateNetworkVoltageLevel
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkVoltageLevel to be updated.
+      - in: body
+        name: networkVoltageLevel
+        description: The updated NetworkVoltageLevel.
+        schema:
+          $ref: '#/definitions/NetworkVoltageLevel'
+      responses:
+        200:
+          description: Updated NetworkVoltageLevel.
+          schema:
+            $ref: '#/definitions/NetworkVoltageLevel'
+        404:
+          description: The NetworkVoltageLevel with the specified objectid was not found.
+
+    delete:
+      tags: [zones]
+      summary: Delete NetworkVoltageLevel.
+      description: >-
+        <p>Delete NetworkVoltageLevel.</p>
+      operationId: deleteNetworkVoltageLevel
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkVoltageLevel to be deleted.
+      responses:
+        204:
+          description: Deleted NetworkVoltageLevel
+          schema:
+            $ref: '#/definitions/NetworkVoltageLevel'
+
+  /zones/violations/networkVoltageLevels:
+    get:
+      tags: [zones]
+      summary: Get all NetworkVoltageLevels of all the constraining elements correspond to the contexts and contingency to pass in the query.
+      description: >-
+        <p>Get all NetworkVoltageLevels of all the constraining elements correspond to the contexts and contingency to pass in the query.</p>
+      operationId: getNetworkVoltageLevelsByContextAndContingency
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: networkcontextId
+        required: true
+        type: string
+        description: ID of network context.
+      - in: query
+        name: contingencyId
+        required: true
+        type: string
+        description: ID of contingency.
+      responses:
+        200:
+          description: A list of NetworkVoltageLevels.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkVoltageLevel'
+        404:
+          description: The NetworkVoltageLevel with the specified networkcontextId and  contingencyId was not found.
+
+  #
+  # Network Zones APIs - NetworkZone
+  #
+  /zones/networkZones:
+    get:
+      tags: [zones]
+      summary: Get all networkZones.
+      description: >-
+        <p>Get all networkZones.</p>
+      operationId: getNetworkZones
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of NetworkZones.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkZone'
+
+    post:
+      tags: [zones]
+      summary: Create new NetworkZones.
+      description: >-
+        <p>Create new NetworkZones</p>
+      operationId: addNetworkZones
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: networkZones
+        description: The list of NetworkZone objects to be created
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/NetworkZone'
+      responses:
+        201:
+          description: Created NetworkZones
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkZone'
+
+  /zones/networkZones/{objectid}:
+    get:
+      tags: [zones]
+      summary: Get NetworkZone.
+      description: >-
+        <p>Get NetworkZone.</p>
+      operationId: getNetworkZone
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkZone.
+      responses:
+        200:
+          description: NetworkZone.
+          schema:
+            $ref: '#/definitions/NetworkZone'
+        404:
+          description: A NetworkZone with the specified objectid was not found.
+
+    put:
+      tags: [zones]
+      summary: Update NetworkZone.
+      description: >-
+        <p>Update NetworkZone.</p>
+      operationId: updateNetworkZone
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkZone to be updated.
+      - in: body
+        name: networkZone
+        description: The updated NetworkZone object
+        schema:
+          $ref: '#/definitions/NetworkZone'
+      responses:
+        200:
+          description: Updated NetworkZone.
+          schema:
+            $ref: '#/definitions/NetworkZone'
+        404:
+          description: A NetworkZone with the specified objectid was not found.
+
+    delete:
+      tags: [zones]
+      summary: Delete NetworkZone.
+      description: >-
+        <p>Delete NetworkZone.</p>
+      operationId: deleteNetworkZone
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkZone to be deleted.
+      responses:
+        204:
+          description: Deleted NetworkZone.
+          schema:
+            $ref: '#/definitions/NetworkZone'
+
+  /zones/networkZones/{objectid}/networkVoltageLevels:
+    post:
+      tags: [zones]
+      summary: Add NetworkVoltageLevels to NetworkZone.
+      description: >-
+        <p>Add NetworkVoltageLevels to NetworkZone.</p>
+      operationId: addNetworkVoltageLevelsToNetworkZone
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of the NetworkZone the NetworkVoltageLevels should be added to.
+      - in: query
+        name: otherNetworkZoneObjectId
+        type: string
+        required: false
+        description: if provided, all NetworkVoltageLevels from this other NetworkZone will be added to the NetworkZone.
+      - in: body
+        name: networkVoltageLevels
+        description: The NetworkVoltageLevel objects to be added to the NetworkZone
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/NetworkVoltageLevel'
+      responses:
+        201:
+          description: NetworkVoltageLevels of the NetworkZone
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkVoltageLevel'
+
+    delete:
+      tags: [zones]
+      summary: Remove NetworkVoltageLevels from NetworkZone.
+      description: >-
+        <p>Remove NetworkVoltageLevels from NetworkZone.</p>
+      operationId: deleteNetworkVoltageLevelsFromNetworkZone
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of the NetworkZone the NetworkVoltageLevels should be removed from.
+      - in: query
+        name: otherNetworkZoneObjectId
+        type: string
+        required: false
+        description: if provided, all NetworkVoltageLevels from this other NetworkZone will be removed from the NetworkZone.
+      - in: body
+        name: networkVoltageLevels
+        description: The NetworkVoltageLevel objects to be removed from the NetworkZone
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/NetworkVoltageLevel'
+      responses:
+        201:
+          description: NetworkVoltageLevels of the NetworkZone
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkVoltageLevel'
+
+  /zones/networkVoltageLevels/{objectid}/networkZones:
+    get:
+      tags: [zones]
+      summary: Get the NetworkZones a given NetworkVoltageLevel is associated to.
+      description: >-
+        <p>Get the NetworkZones a given NetworkVoltageLevel is associated to.</p>
+      operationId: getNetworkZonesByNetworkVoltageLevel
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of NetworkVoltageLevel.
+      responses:
+        200:
+          description: The list of NetworkZones the NetworkVoltageLevel belongs to.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkZone'
+
+  /zones/networkUpload:
+    post:
+      tags: [zones]
+      summary: Uploads a network file to obtain equipments to NetworkVoltageLevels associations.
+      description: >-
+        <p>Uploads a network file to obtain equipments to NetworkVoltageLevels associations.</p>
+      operationId: zonesNetworkUploadPost
+      security:
+      - OauthSecurity:
+        - write
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: upfile
+        type: file
+        description: The network file to upload (must be PowSyBl IIDM gzipped format, for instance network.xiidm.gz).
+
+  #
+  # Users APIs
+  #
+  /users:
+    get:
+      tags: [users]
+      summary: Gets all users.
+      description: >-
+        <p>List all the existing users.</p>
+      operationId: getUsers
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of users.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+
+    post:
+      tags: [users]
+      summary: Creates a new user.
+      description: >-
+        <p>New user</p>
+      operationId: addUser
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: user
+        description: The user JSON you want to post
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The resource can't be found.
+
+  /users/{username}:
+    get:
+      tags: [users]
+      summary: Find user.
+      description: >-
+        <p>Returns a user by username as query parameter.</p>
+      operationId: getUser
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to find.
+      responses:
+        200:
+          description: A user object.
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: A user with the specified username was not found.
+
+    put:
+      tags: [users]
+      summary: Update user.
+      description: >-
+        <p>Update user.</p>
+      operationId: updateUser
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to find.
+      - in: body
+        name: user
+        description: The user JSON you want to post
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: A user object.
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The resource can't be found.
+
+    delete:
+      tags: [users]
+      summary: Delete user.
+      description: >-
+        <p>Deletes a single user by username as query parameter.</p>
+      operationId: deleteUser
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to find.
+      responses:
+        204:
+          description: user deleted
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The resource can't be found.
+
+  /users/{username}/networkZones:
+    get:
+      tags: [users]
+      summary: Gets all networkZones associated to user.
+      description: >-
+        <p>List all the existing networkZones by user.</p>
+      operationId: getNetworkZonesByUser
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to find.
+      responses:
+        200:
+          description: A list of networkZones.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkZone'
+        404:
+          description: The resource can't be found.
+
+  /users/{username}/usertypes:
+    get:
+      tags: [users]
+      summary: Gets all usertypes associated to user.
+      description: >-
+        <p>List all the existing usertypes by user.</p>
+      operationId: getUsertypesByUser
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to find.
+      responses:
+        200:
+          description: A list of usertypes.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+    post:
+      tags: [users]
+      summary: Creates a usertype associated to user.
+      description: >-
+        <p>New usertype by user</p>
+      operationId: addUsertypeByUser
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to update.
+      - in: body
+        name: usertypeWrapper
+        required: true
+        description: The usertype wrapper JSON you want to post
+        schema:
+          $ref: '#/definitions/UsertypeWrapper'
+      responses:
+        201:
+          description: Usertype add successfully
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The resource can't be found.
+
+  /users/{username}/usertypes/{name}:
+    delete:
+      tags: [users]
+      summary: Delete usertype by user.
+      description: >-
+        <p>Deletes a single usertype by user and name as query parameters.</p>
+      operationId: deleteUsertypesByUser
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        required: true
+        type: string
+        description: username of user to update.
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: Name of usertype to find.
+      responses:
+        204:
+          description: usertype deleted
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The resource can't be found.
+
+    #
+    # Usertypes APIs
+    #
+  /usertypes:
+    get:
+      tags: [users]
+      summary: Gets all user types.
+      description: >-
+        <p>List all the existing user types.</p>
+      operationId: getUsertypes
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      responses:
+        200:
+          description: A list of user types.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Usertype'
+
+    post:
+      tags: [users]
+      summary: Creates a new user type.
+      description: >-
+        <p>New user type</p>
+      operationId: addUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: usertype
+        description: The user type JSON you want to post
+        schema:
+          $ref: '#/definitions/Usertype'
+      responses:
+        201:
+          description: User type created successfully
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+  /usertypes/{name}:
+    get:
+      tags: [users]
+      summary: Find user type.
+      description: >-
+        <p>Returns a user type by name as query parameter.</p>
+      operationId: getUsertype
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of user type to find.
+      responses:
+        200:
+          description: A user type object.
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: A user type with the specified name was not found.
+
+    put:
+      tags: [users]
+      summary: Update user type.
+      description: >-
+        <p>Update user type.</p>
+      operationId: updateUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of user type to update.
+      - in: body
+        name: usertype
+        description: The user type JSON you want to post
+        schema:
+          $ref: '#/definitions/Usertype'
+      responses:
+        200:
+          description: A user type object.
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+    delete:
+      tags: [users]
+      summary: Delete user type.
+      description: >-
+        <p>Deletes a single user type by name as query parameter.</p>
+      operationId: deleteUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of user type to deleted.
+      responses:
+        204:
+          description: usertype deleted
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+
+  /usertypes/actualusertypes:
+    get:
+      tags: [users]
+      summary: Find actual user type.
+      description: >-
+        <p>Returns a actual user type by username as query parameter.</p>
+      operationId: getActualUsertype
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: username
+        required: false
+        type: string
+        description: username of user to find.
+      responses:
+        200:
+          description: A user type object object.
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: A user type with the specified username was not found.
+
+  /usertypes/actualusertypes/{name}:
+    put:
+      tags: [users]
+      summary: Update actual user type.
+      description: >-
+        <p>Update actual user type.</p>
+      operationId: updateActualUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of actual user type to update.
+      - in: query
+        name: username
+        required: false
+        type: string
+        description: username of user to update.
+      responses:
+        200:
+          description: A actual user type with the specified username was not updated.
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+
+  /usertypes/{name}/networkZones:
+    get:
+      tags: [users]
+      summary: Gets all networkZones associated to usertype.
+      description: >-
+        <p>List all the existing networkZones by usertype.</p>
+      operationId: getNetworkZonesByUsertype
+      security:
+      - OauthSecurity:
+        - read
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of usertype to find.
+      responses:
+        200:
+          description: A list of network Zones with the specified name was found.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkZone'
+        404:
+          description: The resource can't be found.
+
+    post:
+      tags: [users]
+      summary: Creates a networkZone associated to usertype.
+      description: >-
+        <p>New networkZone by usertype</p>
+      operationId: addNetworkZoneByUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of user type to find.
+      - in: body
+        name: networkZone
+        description: The networkZone JSON you want to post
+        schema:
+          $ref: '#/definitions/NetworkZone'
+      responses:
+        201:
+          description: NetworkZone add successfully
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+  /usertypes/{name}/networkZones/{objectid}:
+    delete:
+      tags: [users]
+      summary: Delete networkZone by usertype.
+      description: >-
+        <p>Deletes a single networkZone by usertype and objectid as query parameters.</p>
+      operationId: deleteNetworkZoneByUsertype
+      security:
+      - OauthSecurity:
+        - write
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        description: name of usertype to update.
+      - in: path
+        name: objectid
+        required: true
+        type: string
+        description: ID of networkZone to delete.
+      responses:
+        204:
+          description: networkZone deleted
+          schema:
+            $ref: '#/definitions/Usertype'
+        404:
+          description: The resource can't be found.
+
+  #
+  # Test APIs
+  #
+
+definitions:
+  AbstractComputationResult:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.AbstractComputationResult for further details.</p>
+  NetworkContext:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.NetworkContext for further details.</p>
+
+  Prioritize:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.remedials.Prioritize for further details.</p>
+
+  Remedial:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.remedials.Remedial for further details.</p>
+
+  PrioritizeRemedialByContingency:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.services.logic.PrioritizeRemedialByContingency for further details.</p>
+
+  RemedialsListForPrioritize:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.services.logic.RemedialsListForPrioritize for further details.</p>
+
+  SnapshotResult:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.logic.SnapshotResult for further details.</p>
+
+  LimitViolationByIdenfifier:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.logic.LimitViolationByIdenfifier for further details.</p>
+
+  LimitViolationByIdenfifierAndRemedials:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.logic.LimitViolationByIdenfifierAndRemedials for further details.</p>
+
+  NetworkBaseVoltage:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.zones.NetworkBaseVoltage for further details.</p>
+
+  NetworkVoltageLevel:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.zones.NetworkBaseVoltage for further details.</p>
+
+  NetworkZone:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.zones.NetworkZone for further details.</p>
+
+  User:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.user.User for further details.</p>
+
+  Usertype:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.user.Usertype for further details.</p>
+
+  UsertypeWrapper:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.wrapper.UsertypeWrapper for further details.</p>
+
+  CaseType:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.CaseType for further details.</p>
+
+  CaseCategory:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.computation.CaseCategory for further details.</p>
+
+  TimerangeType:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.model.timerange.TimerangeType for further details.</p>
+
+  TimerangeLogic:
+    type: object
+    description: >-
+      <p>Class imported from Apogee SEA.</p>
+      <p>See the Javadoc of com.rte_france.apogee.sea.server.logic.TimerangeLogic for further details.</p>

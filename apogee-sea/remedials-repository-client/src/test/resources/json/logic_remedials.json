@@ -1,0 +1,331 @@
+{
+  "N-k Argia - Cantegrit + Automate Argia": [],
+  "N-k Distre 2.1": [
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_AT766 + VINCEP6_2NE_pr�par�",
+      "idAbstractLogic": 1610,
+      "shortDescription": "VINCEP6_O_AT766 + VINCEP6_2NE_pr�par�"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_2NE_Pr�par�",
+      "idAbstractLogic": 1607,
+      "shortDescription": "VINCEP6_2NE_Pr�par�"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_Coupl + BEZAUP6_O_AT762",
+      "idAbstractLogic": 1612,
+      "shortDescription": "VINCEP6_O_Coupl + BEZAUP6_O_AT762"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###BEZAUP6_O_AT761",
+      "idAbstractLogic": 98,
+      "shortDescription": "BEZAUP6_O_AT761"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_F_AT765",
+      "idAbstractLogic": 1609,
+      "shortDescription": "VINCEP6_F_AT765"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_AT766 + VINCEP6_2NE_pr�par�",
+      "idAbstractLogic": 3636,
+      "shortDescription": "VINCEP6_O_AT766 + VINCEP6_2NE_pr�par�"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_2NE_Pr�par� + SUIS5P6_O_LANEU",
+      "idAbstractLogic": 1608,
+      "shortDescription": "VINCEP6_2NE_Pr�par� + SUIS5P6_O_LANEU"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###LANEUP6_O_ZSAU9",
+      "idAbstractLogic": 770,
+      "shortDescription": "LANEUP6_O_ZSAU9"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###LANEUP6_O_SUIS5",
+      "idAbstractLogic": 2795,
+      "shortDescription": "LANEUP6_O_SUIS5"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_Coupl",
+      "idAbstractLogic": 1611,
+      "shortDescription": "VINCEP6_O_Coupl"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###LANEUP6_O_SUIS5",
+      "idAbstractLogic": 769,
+      "shortDescription": "LANEUP6_O_SUIS5"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###LANEUP6_O_ZSAU9",
+      "idAbstractLogic": 2796,
+      "shortDescription": "LANEUP6_O_ZSAU9"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_Coupl + BEZAUP6_O_AT762",
+      "idAbstractLogic": 3638,
+      "shortDescription": "VINCEP6_O_Coupl + BEZAUP6_O_AT762"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_2NE_Pr�par�",
+      "idAbstractLogic": 3633,
+      "shortDescription": "VINCEP6_2NE_Pr�par�"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_F_AT765",
+      "idAbstractLogic": 3635,
+      "shortDescription": "VINCEP6_F_AT765"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###BEZAUP6_O_AT761",
+      "idAbstractLogic": 2124,
+      "shortDescription": "BEZAUP6_O_AT761"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_2NE_Pr�par� + SUIS5P6_O_LANEU",
+      "idAbstractLogic": 3634,
+      "shortDescription": "VINCEP6_2NE_Pr�par� + SUIS5P6_O_LANEU"
+    },
+    {
+      "idLogicContext": "N-k Distre 2.1###VINCEL61ZMAD6###VINCEP6_O_Coupl",
+      "idAbstractLogic": 3637,
+      "shortDescription": "VINCEP6_O_Coupl"
+    }
+  ],
+  "N-2 Mandarins-Warande / Attaques": [],
+  "N-2 Tavel Realtor": [
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_COUPL + EGUZOP4_O_SSMCE.2",
+      "idAbstractLogic": 2563,
+      "shortDescription": "EGUZOP4_O_COUPL + EGUZOP4_O_SSMCE.2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 2574,
+      "shortDescription": "EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###MADROP4_F_COUPL",
+      "idAbstractLogic": 825,
+      "shortDescription": "MADROP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_O_AT762 + BUZANP4_O_MADRO.1 + EGUZOP4_F_COUPL",
+      "idAbstractLogic": 2579,
+      "shortDescription": "EGUZOP6_O_AT762 + BUZANP4_O_MADRO.1 + EGUZOP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_F_Omnibus + EGUZOP7_O_AT762",
+      "idAbstractLogic": 550,
+      "shortDescription": "EGUZOP6_F_Omnibus + EGUZOP7_O_AT762"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_COUPL",
+      "idAbstractLogic": 535,
+      "shortDescription": "EGUZOP4_O_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###BUZANP4_F_MADRO.1",
+      "idAbstractLogic": 2211,
+      "shortDescription": "BUZANP4_F_MADRO.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_F_Omnibus",
+      "idAbstractLogic": 549,
+      "shortDescription": "EGUZOP6_F_Omnibus"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_CXME .1",
+      "idAbstractLogic": 539,
+      "shortDescription": "EGUZOP4_O_CXME .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###CORM5P4_O_ZGRAV.1 + MOUS5P4_O_TR641",
+      "idAbstractLogic": 2455,
+      "shortDescription": "CORM5P4_O_ZGRAV.1 + MOUS5P4_O_TR641"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###BUZANP4_F_MADRO.1",
+      "idAbstractLogic": 185,
+      "shortDescription": "BUZANP4_F_MADRO.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_F_COUPL",
+      "idAbstractLogic": 533,
+      "shortDescription": "EGUZOP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###AIGURP4_O_CXME .1",
+      "idAbstractLogic": 2032,
+      "shortDescription": "AIGURP4_O_CXME .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###MADROP4_F_COUPL + EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 826,
+      "shortDescription": "MADROP4_F_COUPL + EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .1",
+      "idAbstractLogic": 545,
+      "shortDescription": "EGUZOP4_O_VNES .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_CXME .1",
+      "idAbstractLogic": 2565,
+      "shortDescription": "EGUZOP4_O_CXME .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_O_AT762 + BUZANP4_O_MADRO.1 + EGUZOP4_F_COUPL",
+      "idAbstractLogic": 553,
+      "shortDescription": "EGUZOP6_O_AT762 + BUZANP4_O_MADRO.1 + EGUZOP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 546,
+      "shortDescription": "EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_F_Omnibus",
+      "idAbstractLogic": 2575,
+      "shortDescription": "EGUZOP6_F_Omnibus"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_COUPL + EGUZOP4_O_SSMCE.2",
+      "idAbstractLogic": 537,
+      "shortDescription": "EGUZOP4_O_COUPL + EGUZOP4_O_SSMCE.2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###FERRAP4_F_ZFORG.1 + EGUZOP4_O_ZGRAV.1",
+      "idAbstractLogic": 2626,
+      "shortDescription": "FERRAP4_F_ZFORG.1 + EGUZOP4_O_ZGRAV.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_SSMCE.2",
+      "idAbstractLogic": 543,
+      "shortDescription": "EGUZOP4_O_SSMCE.2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_F_COUPL",
+      "idAbstractLogic": 2559,
+      "shortDescription": "EGUZOP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###MADROP4_F_COUPL",
+      "idAbstractLogic": 2851,
+      "shortDescription": "MADROP4_F_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_O_TR642",
+      "idAbstractLogic": 2591,
+      "shortDescription": "EGUZOP6_O_TR642"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_COUPL",
+      "idAbstractLogic": 2561,
+      "shortDescription": "EGUZOP4_O_COUPL"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###MADROP4_F_COUPL + EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 2852,
+      "shortDescription": "MADROP4_F_COUPL + EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_AIGUR.1",
+      "idAbstractLogic": 2560,
+      "shortDescription": "EGUZOP4_O_AIGUR.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 548,
+      "shortDescription": "EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_TR643",
+      "idAbstractLogic": 2570,
+      "shortDescription": "EGUZOP4_O_TR643"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###CXME P4_O_EGUZO.1",
+      "idAbstractLogic": 452,
+      "shortDescription": "CXME P4_O_EGUZO.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_AIGUR.1",
+      "idAbstractLogic": 534,
+      "shortDescription": "EGUZOP4_O_AIGUR.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .1",
+      "idAbstractLogic": 2571,
+      "shortDescription": "EGUZOP4_O_VNES .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2",
+      "idAbstractLogic": 2572,
+      "shortDescription": "EGUZOP4_O_VNES .1 + EGUZOP4_O_VNES .2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###FERRAP4_F_ZFORG.1 + EGUZOP4_O_ZGRAV.1",
+      "idAbstractLogic": 600,
+      "shortDescription": "FERRAP4_F_ZFORG.1 + EGUZOP4_O_ZGRAV.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###CXME P4_O_EGUZO.1",
+      "idAbstractLogic": 2478,
+      "shortDescription": "CXME P4_O_EGUZO.1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###CORM5P4_O_ZGRAV.1 + MOUS5P4_O_TR641",
+      "idAbstractLogic": 429,
+      "shortDescription": "CORM5P4_O_ZGRAV.1 + MOUS5P4_O_TR641"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_TR643",
+      "idAbstractLogic": 544,
+      "shortDescription": "EGUZOP4_O_TR643"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_O_TR642",
+      "idAbstractLogic": 565,
+      "shortDescription": "EGUZOP6_O_TR642"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP4_O_SSMCE.2",
+      "idAbstractLogic": 2569,
+      "shortDescription": "EGUZOP4_O_SSMCE.2"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###AIGURP4_O_CXME .1",
+      "idAbstractLogic": 6,
+      "shortDescription": "AIGURP4_O_CXME .1"
+    },
+    {
+      "idLogicContext": "N-2 Tavel Realtor###EGUZOY643###EGUZOP6_F_Omnibus + EGUZOP7_O_AT762",
+      "idAbstractLogic": 2576,
+      "shortDescription": "EGUZOP6_F_Omnibus + EGUZOP7_O_AT762"
+    }
+  ],
+  "PRE_CONTINGENCY_STATE": [],
+  "BOLL5L61TERRA": [
+    {
+      "idLogicContext": "BOLL5L61TERRA###.AUBAL61MOULA###MOULAP6_O_AT761",
+      "idAbstractLogic": 938,
+      "shortDescription": "MOULAP6_O_AT761"
+    },
+    {
+      "idLogicContext": "BOLL5L61TERRA###.AUBAL61MOULA###MOULAP6_O_Coupl + MOULAP6_O_AT761",
+      "idAbstractLogic": 2965,
+      "shortDescription": "MOULAP6_O_Coupl + MOULAP6_O_AT761"
+    },
+    {
+      "idLogicContext": "BOLL5L61TERRA###.AUBAL61MOULA###MOULAP6_O_AT761",
+      "idAbstractLogic": 2964,
+      "shortDescription": "MOULAP6_O_AT761"
+    },
+    {
+      "idLogicContext": "BOLL5L61TERRA###.AUBAL61MOULA###MOULAP6_O_Coupl + MOULAP6_O_AT761",
+      "idAbstractLogic": 939,
+      "shortDescription": "MOULAP6_O_Coupl + MOULAP6_O_AT761"
+    }
+  ]
+}

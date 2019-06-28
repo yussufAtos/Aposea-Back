@@ -1,0 +1,35 @@
+[
+  {
+    "prioritizeStartDate": "2018-11-12T08:00:18.692Z",
+    "prioritizeEndDate": null,
+    "networkContingency": {
+      "id": "N-1 Tavel Realtor"
+    },
+    "prioritizeRemedialList": [
+      {
+        "prioritizeValue": 1,
+        "remedial": {
+          "idRemedialRepository": "remedial1",
+          "idLogicContext": "remedial1",
+          "shortDescription": "remedial1"
+        }
+      },
+      {
+        "prioritizeValue": 2,
+        "remedial": {
+          "idRemedialRepository": "remedial2",
+          "idLogicContext": "remedial2",
+          "shortDescription": "remedial2"
+        }
+      },
+      {
+        "prioritizeValue": 3,
+        "remedial": {
+          "idRemedialRepository": "remedial3",
+          "idLogicContext": "remedial3",
+          "shortDescription": "remedial3"
+        }
+      }
+    ]
+  }
+]
