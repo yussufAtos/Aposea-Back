@@ -93,7 +93,7 @@
         <jgrapht.version>1.0.1</jgrapht.version>
         <jimfs.version>1.1</jimfs.version>
         <jodatime.version>2.9.7</jodatime.version>
-        <logback.version>1.1.8</logback.version>
+        <logback.version>1.2.0</logback.version>
         <lombok.version>1.18.0</lombok.version>
         <mapdb.version>3.0.3</mapdb.version>
 
